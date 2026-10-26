@@ -51,6 +51,7 @@ body:has(.course-home) main.content {
   align-items: center;
   gap: clamp(2rem, 6vw, 7rem);
   min-height: 61vh;
+  container-type: inline-size;
   padding: clamp(3.25rem, 7vw, 7rem) clamp(1.5rem, 8vw, 9rem);
   background: var(--ink);
   color: var(--paper);
@@ -93,7 +94,8 @@ body:has(.course-home) main.content {
 .course-hero h1 {
   margin: 0;
   color: var(--paper);
-  font-size: clamp(3.2rem, 7.5vw, 7.6rem);
+  /* Sized to the hero box, not the window, so "Economics" never outgrows its column */
+  font-size: clamp(3rem, 10.5cqi, 6.4rem);
   font-weight: 760;
   letter-spacing: -.065em;
   line-height: .86;
@@ -116,7 +118,7 @@ body:has(.course-home) main.content {
 
 .hero-mark {
   position: relative;
-  width: min(29vw, 390px);
+  width: min(100%, 390px);
   aspect-ratio: 1;
   justify-self: center;
 }
