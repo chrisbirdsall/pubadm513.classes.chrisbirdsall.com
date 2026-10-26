@@ -1,0 +1,98 @@
+---
+title: "Lorenz curves and the Gini coefficient"
+pagetitle: "Lorenz curves and the Gini · PUBADM 513"
+description: "Interactive Lorenz curve and Gini coefficient explorer with Idaho and US Census data."
+---
+
+<a class="back-link" href="../index.html">← PUBADM 513</a>
+
+::: {.explorer-intro}
+Line up every household from poorest to richest. A Lorenz curve asks: what share of all income goes to the bottom 20%? The bottom 40%? If income were shared equally, the curve would follow the diagonal. The Gini coefficient measures the gap between the diagonal and the curve. It runs from 0 (everyone has the same income) to 1 (one household has everything).
+:::
+
+```{ojs}
+//| echo: false
+// ACS 2024 1-year, table B19082 (shares of aggregate household income by quintile)
+// and B19083 (Gini index). Queried 2026-10-26.
+census = ({
+  "Idaho": {shares: [3.89, 9.90, 15.70, 23.04, 47.48], gini: 0.4345},
+  "United States": {shares: [3.00, 8.55, 14.39, 22.59, 51.47], gini: 0.4809}
+})
+lorenz = shares => {
+  const total = d3.sum(shares)
+  let cum = 0
+  return [{x: 0, y: 0}, ...shares.map((s, i) => ({x: (i + 1) / 5, y: (cum += s / total)}))]
+}
+// Trapezoid rule on five quintile points
+giniOf = pts => 1 - d3.sum(pts.slice(1), (p, i) => (p.x - pts[i].x) * (p.y + pts[i].y))
+```
+
+::: {.explorer-panel}
+```{ojs}
+//| echo: false
+viewof place = Inputs.radio(["Idaho", "United States"], {value: "Idaho", label: "Compare with"})
+```
+
+**Build your own economy.** Here is the average household income in each fifth, in thousands of dollars:
+
+```{ojs}
+//| echo: false
+viewof q1 = Inputs.range([0, 400], {step: 5, value: 15, label: "Poorest 20%"})
+viewof q2 = Inputs.range([0, 400], {step: 5, value: 40, label: "Next 20%"})
+viewof q3 = Inputs.range([0, 400], {step: 5, value: 65, label: "Middle 20%"})
+viewof q4 = Inputs.range([0, 400], {step: 5, value: 100, label: "Next 20%"})
+viewof q5 = Inputs.range([0, 400], {step: 5, value: 230, label: "Richest 20%"})
+```
+
+```{ojs}
+//| echo: false
+mine = lorenz([q1, q2, q3, q4, q5])
+theirs = lorenz(census[place].shares)
+myGini = d3.sum([q1, q2, q3, q4, q5]) > 0 ? giniOf(mine) : NaN
+theirGini = giniOf(theirs)
+Plot.plot({
+  width: 560,
+  height: 520,
+  marginLeft: 56,
+  marginBottom: 46,
+  style: {fontSize: "13px", background: "transparent"},
+  x: {domain: [0, 1], label: "Share of households, poorest to richest →", tickFormat: "%"},
+  y: {domain: [0, 1], label: "↑ Share of all income", tickFormat: "%", grid: true},
+  marks: [
+    Plot.areaY(theirs, {x: "x", y1: "y", y2: "x", fill: "#176b87", fillOpacity: 0.12}),
+    Plot.line([{x: 0, y: 0}, {x: 1, y: 1}], {x: "x", y: "y", stroke: "#597287", strokeDasharray: "5 5"}),
+    Plot.line(theirs, {x: "x", y: "y", stroke: "#176b87", strokeWidth: 3}),
+    Plot.dot(theirs, {x: "x", y: "y", fill: "#176b87", r: 4}),
+    Plot.line(mine, {x: "x", y: "y", stroke: "#2f7d5b", strokeWidth: 3, strokeDasharray: "8 4"}),
+    Plot.dot(mine, {x: "x", y: "y", fill: "#2f7d5b", r: 4}),
+    Plot.text([{x: 0.55, y: 0.6}], {x: "x", y: "y", text: () => "Perfect equality", rotate: -45, fill: "#597287", dy: -8}),
+    Plot.text([{x: 0.8, y: theirs[4].y}], {x: "x", y: "y", text: () => place, dx: 8, dy: 14, textAnchor: "start", fill: "#176b87", fontWeight: 700}),
+    Plot.text([{x: 0.6, y: mine[3].y}], {x: "x", y: "y", text: () => "Your economy", dx: 8, dy: 14, textAnchor: "start", fill: "#2f7d5b", fontWeight: 700})
+  ]
+})
+```
+:::
+
+```{ojs}
+//| echo: false
+html`<div class="stat-row">
+  <div class="stat" style="border-left-color:#2f7d5b"><div class="k">Your economy · Gini</div><div class="v">${isNaN(myGini) ? "—" : myGini.toFixed(3)}</div></div>
+  <div class="stat"><div class="k">${place} · Gini from these 5 points</div><div class="v">${theirGini.toFixed(3)}</div></div>
+  <div class="stat"><div class="k">${place} · official Census Gini</div><div class="v">${census[place].gini.toFixed(3)}</div></div>
+  <div class="stat" style="border-left-color:#e5ad3d"><div class="k">Richest 20% / poorest 20% (yours)</div><div class="v">${q1 > 0 ? (q5 / q1).toFixed(1) + "×" : "—"}</div></div>
+</div>`
+```
+
+::: {.try-this}
+### Try this
+
+1. Set all five sliders to the same income. What does the curve look like, and what is the Gini?
+2. Now **double** every household's income. Does the Gini change? What does that tell you about what the Gini measures, and what it doesn't?
+3. Take \$20k from the richest fifth and give it to the poorest fifth. How far does the Gini fall? Now move \$20k from the middle fifth to the next fifth. Which transfer matters more?
+4. Try to match Idaho's curve. Then try to match the United States. What separates the two?
+5. Why is the official Census Gini higher than the one computed from just five points? (Hint: what's hidden *inside* each fifth?)
+:::
+
+Data: U.S. Census Bureau, American Community Survey 2024 1-year estimates, tables B19082 and B19083. Margins of error on the Gini (90% confidence): Idaho ±0.007, United States ±0.001.
+
+Read more: [ESPP 5.10, Comparing inequality across the world](https://books.core-econ.org/espp/book/text/05.html#find-out-more-the-gini-coefficient-as-a-measure-of-inequality) and [5.12 Doing Economics: Measuring inequality](https://books.core-econ.org/espp/book/text/05.html).

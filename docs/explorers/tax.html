@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Interactive supply-and-demand explorer: tax incidence, revenue, and deadweight loss.">
+
+<title>Who pays a sugar tax? · PUBADM 513 – PUBADM 513</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-70a195fd42802aac2c3e40fbd8aa6df2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Who pays a sugar tax?</h1>
+</div>
+
+<div>
+  <div class="description">
+    Interactive supply-and-demand explorer: tax incidence, revenue, and deadweight loss.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a class="back-link" href="../index.html">← PUBADM 513</a></p>
+<div class="explorer-intro">
+<p>Suppose Boise puts a tax on sugary drinks, collected from sellers. Who ends up paying it: the people buying soda, or the stores selling it? How much money does it raise, and how much buying and selling simply stops happening? Move the sliders and find out. This is the model behind <em>Doing Economics</em> Lab 2, which uses data from Berkeley’s real soda tax.</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="15" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 14;"><span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>viewof t <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="fl">0.05</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Tax ($ per liter)"</span>})</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>viewof buyerResp <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">5</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"How much buyers cut back (1–5)"</span>})</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>viewof sellerResp <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">1</span><span class="op">,</span> <span class="dv">5</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="fl">0.5</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"How much sellers cut back (1–5)"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="24" data-source-offset="-153"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 23;"><span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>Q0 <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>P0 <span class="op">=</span> <span class="dv">2</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="fl">0.04</span> <span class="op">/</span> buyerResp</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> <span class="fl">0.02</span> <span class="op">/</span> sellerResp</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> P0 <span class="op">+</span> b <span class="op">*</span> Q0</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> P0 <span class="op">-</span> d <span class="op">*</span> Q0</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>Qt <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">max</span>(<span class="dv">0</span><span class="op">,</span> Q0 <span class="op">-</span> t <span class="op">/</span> (b <span class="op">+</span> d))</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>Pb <span class="op">=</span> a <span class="op">-</span> b <span class="op">*</span> Qt</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>Ps <span class="op">=</span> Pb <span class="op">-</span> t</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>buyerShare <span class="op">=</span> t <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> (Pb <span class="op">-</span> P0) <span class="op">/</span> t <span class="op">:</span> d <span class="op">/</span> (b <span class="op">+</span> d)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>revenue <span class="op">=</span> t <span class="op">*</span> Qt</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>dwl <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> t <span class="op">*</span> (Q0 <span class="op">-</span> Qt)</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>cs <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> (a <span class="op">-</span> Pb) <span class="op">*</span> Qt</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>ps <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> (Ps <span class="op">-</span> c) <span class="op">*</span> Qt</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>band <span class="op">=</span> (<span class="im">from</span><span class="op">,</span> to<span class="op">,</span> lo<span class="op">,</span> hi) <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="im">from</span><span class="op">,</span> to <span class="op">+</span> <span class="fl">1e-9</span><span class="op">,</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">max</span>((to <span class="op">-</span> <span class="im">from</span>) <span class="op">/</span> <span class="dv">60</span><span class="op">,</span> <span class="fl">1e-6</span>))<span class="op">.</span><span class="fu">map</span>(q <span class="kw">=&gt;</span> ({q<span class="op">,</span> <span class="dt">lo</span><span class="op">:</span> <span class="fu">lo</span>(q)<span class="op">,</span> <span class="dt">hi</span><span class="op">:</span> <span class="fu">hi</span>(q)}))</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>curve <span class="op">=</span> f <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="fu">range</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">201</span><span class="op">,</span> <span class="dv">2</span>)<span class="op">.</span><span class="fu">map</span>(q <span class="kw">=&gt;</span> ({q<span class="op">,</span> <span class="dt">p</span><span class="op">:</span> <span class="fu">f</span>(q)}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-6" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-7" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-8" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-9" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-10" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-11" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-12" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-13" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-14" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-15" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-2-16" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="explorer-panel">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="44" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 43;"><span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">820</span><span class="op">,</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">470</span><span class="op">,</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">56</span><span class="op">,</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginBottom</span><span class="op">:</span> <span class="dv">46</span><span class="op">,</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  <span class="dt">style</span><span class="op">:</span> {<span class="dt">fontSize</span><span class="op">:</span> <span class="st">"13px"</span><span class="op">,</span> <span class="dt">background</span><span class="op">:</span> <span class="st">"transparent"</span>}<span class="op">,</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">200</span>]<span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Soda sold (thousand liters per week) →"</span>}<span class="op">,</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">6</span>]<span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"↑ Price ($ per liter)"</span><span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  <span class="dt">clip</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(<span class="fu">band</span>(<span class="dv">0</span><span class="op">,</span> Qt<span class="op">,</span> () <span class="kw">=&gt;</span> Pb<span class="op">,</span> q <span class="kw">=&gt;</span> a <span class="op">-</span> b <span class="op">*</span> q)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y1</span><span class="op">:</span> <span class="st">"lo"</span><span class="op">,</span> <span class="dt">y2</span><span class="op">:</span> <span class="st">"hi"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#176b87"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.22</span>})<span class="op">,</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(<span class="fu">band</span>(<span class="dv">0</span><span class="op">,</span> Qt<span class="op">,</span> q <span class="kw">=&gt;</span> c <span class="op">+</span> d <span class="op">*</span> q<span class="op">,</span> () <span class="kw">=&gt;</span> Ps)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y1</span><span class="op">:</span> <span class="st">"lo"</span><span class="op">,</span> <span class="dt">y2</span><span class="op">:</span> <span class="st">"hi"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#e5ad3d"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.3</span>})<span class="op">,</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(<span class="fu">band</span>(<span class="dv">0</span><span class="op">,</span> Qt<span class="op">,</span> () <span class="kw">=&gt;</span> Ps<span class="op">,</span> () <span class="kw">=&gt;</span> Pb)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y1</span><span class="op">:</span> <span class="st">"lo"</span><span class="op">,</span> <span class="dt">y2</span><span class="op">:</span> <span class="st">"hi"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#2f7d5b"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.3</span>})<span class="op">,</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(<span class="fu">band</span>(Qt<span class="op">,</span> Q0<span class="op">,</span> q <span class="kw">=&gt;</span> c <span class="op">+</span> d <span class="op">*</span> q<span class="op">,</span> q <span class="kw">=&gt;</span> a <span class="op">-</span> b <span class="op">*</span> q)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y1</span><span class="op">:</span> <span class="st">"lo"</span><span class="op">,</span> <span class="dt">y2</span><span class="op">:</span> <span class="st">"hi"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#c24f3d"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.45</span>})<span class="op">,</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(<span class="fu">curve</span>(q <span class="kw">=&gt;</span> a <span class="op">-</span> b <span class="op">*</span> q)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#176b87"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(<span class="fu">curve</span>(q <span class="kw">=&gt;</span> c <span class="op">+</span> d <span class="op">*</span> q)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b07d12"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(<span class="fu">curve</span>(q <span class="kw">=&gt;</span> c <span class="op">+</span> d <span class="op">*</span> q <span class="op">+</span> t)<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#b07d12"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"6 5"</span>})<span class="op">,</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([Pb<span class="op">,</span> Ps]<span class="op">,</span> {<span class="dt">x1</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">x2</span><span class="op">:</span> Qt<span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#102a43"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"2 4"</span>})<span class="op">,</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>([Qt]<span class="op">,</span> {<span class="dt">y1</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">y2</span><span class="op">:</span> Pb<span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#102a43"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"2 4"</span>})<span class="op">,</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>([{<span class="dt">q</span><span class="op">:</span> Q0<span class="op">,</span> <span class="dt">p</span><span class="op">:</span> P0}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#fff"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#102a43"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">2</span>})<span class="op">,</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>([{<span class="dt">q</span><span class="op">:</span> Qt<span class="op">,</span> <span class="dt">p</span><span class="op">:</span> Pb}<span class="op">,</span> {<span class="dt">q</span><span class="op">:</span> Qt<span class="op">,</span> <span class="dt">p</span><span class="op">:</span> Ps}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#102a43"</span>})<span class="op">,</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">q</span><span class="op">:</span> <span class="dv">196</span><span class="op">,</span> <span class="dt">p</span><span class="op">:</span> a <span class="op">-</span> b <span class="op">*</span> <span class="dv">196</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="st">"Demand"</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">12</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"end"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#176b87"</span><span class="op">,</span> <span class="dt">fontWeight</span><span class="op">:</span> <span class="dv">700</span>})<span class="op">,</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">q</span><span class="op">:</span> <span class="dv">196</span><span class="op">,</span> <span class="dt">p</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">min</span>(<span class="fl">5.8</span><span class="op">,</span> c <span class="op">+</span> d <span class="op">*</span> <span class="dv">196</span>)}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="st">"Supply"</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="dv">14</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"end"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#b07d12"</span><span class="op">,</span> <span class="dt">fontWeight</span><span class="op">:</span> <span class="dv">700</span>})<span class="op">,</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">q</span><span class="op">:</span> <span class="dv">196</span><span class="op">,</span> <span class="dt">p</span><span class="op">:</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">min</span>(<span class="fl">5.8</span><span class="op">,</span> c <span class="op">+</span> d <span class="op">*</span> <span class="dv">196</span> <span class="op">+</span> t)}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> t <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="st">"Supply + tax"</span> <span class="op">:</span> <span class="st">""</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">10</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"end"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#b07d12"</span>})<span class="op">,</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">q</span><span class="op">:</span> Q0<span class="op">,</span> <span class="dt">p</span><span class="op">:</span> P0}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"q"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"p"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="st">"No-tax equilibrium"</span><span class="op">,</span> <span class="dt">dx</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="dv">16</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"start"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#597287"</span>})</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-3" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="76" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 75;"><span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>swatch <span class="op">=</span> (color<span class="op">,</span> opacity<span class="op">,</span> label) <span class="kw">=&gt;</span> <span class="fu">html</span><span class="vs">`&lt;span style="display:inline-flex;align-items:center;gap:.4rem;margin-right:1.1rem"&gt;&lt;span style="width:14px;height:14px;background:</span><span class="sc">${</span>color<span class="sc">}</span><span class="vs">;opacity:</span><span class="sc">${</span>opacity<span class="sc">}</span><span class="vs">"&gt;&lt;/span&gt;</span><span class="sc">${</span>label<span class="sc">}</span><span class="vs">&lt;/span&gt;`</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div style="font-size:.9rem;color:#597287"&gt;</span></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="fu">swatch</span>(<span class="st">"#176b87"</span><span class="op">,</span> <span class="op">.</span><span class="dv">5</span><span class="op">,</span> <span class="st">"Buyers' gain (consumer surplus)"</span>)<span class="sc">}</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="fu">swatch</span>(<span class="st">"#e5ad3d"</span><span class="op">,</span> <span class="op">.</span><span class="dv">6</span><span class="op">,</span> <span class="st">"Sellers' gain (producer surplus)"</span>)<span class="sc">}</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="fu">swatch</span>(<span class="st">"#2f7d5b"</span><span class="op">,</span> <span class="op">.</span><span class="dv">6</span><span class="op">,</span> <span class="st">"Tax revenue"</span>)<span class="sc">}</span></span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a><span class="sc">${</span><span class="fu">swatch</span>(<span class="st">"#c24f3d"</span><span class="op">,</span> <span class="op">.</span><span class="dv">7</span><span class="op">,</span> <span class="st">"Deadweight loss"</span>)<span class="sc">}</span></span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="88" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 87;"><span id="cb5-88"><a href="#cb5-88" aria-hidden="true" tabindex="-1"></a>money <span class="op">=</span> x <span class="kw">=&gt;</span> <span class="st">"$"</span> <span class="op">+</span> d3<span class="op">.</span><span class="fu">format</span>(<span class="st">",.0f"</span>)(x <span class="op">*</span> <span class="dv">1000</span>)</span>
+<span id="cb5-89"><a href="#cb5-89" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="stat-row"&gt;</span></span>
+<span id="cb5-90"><a href="#cb5-90" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat"&gt;&lt;div class="k"&gt;Price buyers pay&lt;/div&gt;&lt;div class="v"&gt;$</span><span class="sc">${</span>Pb<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-91"><a href="#cb5-91" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat"&gt;&lt;div class="k"&gt;Price sellers keep&lt;/div&gt;&lt;div class="v"&gt;$</span><span class="sc">${</span>Ps<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)<span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-92"><a href="#cb5-92" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat"&gt;&lt;div class="k"&gt;Share paid by buyers&lt;/div&gt;&lt;div class="v"&gt;</span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(<span class="dv">100</span> <span class="op">*</span> buyerShare)<span class="sc">}</span><span class="vs">%&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-93"><a href="#cb5-93" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat"&gt;&lt;div class="k"&gt;Soda sold&lt;/div&gt;&lt;div class="v"&gt;</span><span class="sc">${</span>Qt<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>)<span class="sc">}</span><span class="vs">k L &lt;span style="font-size:.85rem;color:#597287"&gt;(</span><span class="sc">${</span>Qt <span class="op">&lt;</span> Q0 <span class="op">?</span> <span class="st">"−"</span> <span class="op">+</span> (<span class="dv">100</span> <span class="op">*</span> (Q0 <span class="op">-</span> Qt) <span class="op">/</span> Q0)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">0</span>) <span class="op">+</span> <span class="st">"%"</span> <span class="op">:</span> <span class="st">"no change"</span><span class="sc">}</span><span class="vs">)&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-94"><a href="#cb5-94" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat"&gt;&lt;div class="k"&gt;Tax revenue / week&lt;/div&gt;&lt;div class="v"&gt;</span><span class="sc">${</span><span class="fu">money</span>(revenue)<span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-95"><a href="#cb5-95" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat" style="border-left-color:#c24f3d"&gt;&lt;div class="k"&gt;Deadweight loss / week&lt;/div&gt;&lt;div class="v"&gt;</span><span class="sc">${</span><span class="fu">money</span>(dwl)<span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-96"><a href="#cb5-96" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-5-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-5-2" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+<section id="try-this" class="level3 try-this">
+<h3 data-anchor-id="try-this">Try this</h3>
+<ol type="1">
+<li>Set buyers’ response to <strong>1</strong>: people keep buying soda almost no matter the price. Who pays most of the tax now? What happens to the deadweight loss?</li>
+<li>Now set buyers’ response to <strong>5</strong>. The tax shifts toward sellers, sales fall more, and revenue drops. If the goal is <em>public health</em> rather than <em>revenue</em>, which world do you want to be in?</li>
+<li>Double the tax from $0.50 to $1.00. Does the deadweight loss double, or do something else? Why?</li>
+<li>The statute says sellers pay the tax. Does that decide who actually pays it?</li>
+</ol>
+</section>
+<p>Read more: <a href="https://books.core-econ.org/espp/book/text/07.html">ESPP Unit 7, Firms and markets for goods and services</a> and <a href="https://books.core-econ.org/espp/book/text/03.html#313-doing-economics-measuring-the-effect-of-a-sugar-tax">3.13 Doing Economics: Measuring the effect of a sugar tax</a>.</p>
+
+
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6InZpZXdvZiB0ID0gSW5wdXRzLnJhbmdlKFswLCAxXSwge3N0ZXA6IDAuMDUsIHZhbHVlOiAwLjUsIGxhYmVsOiBcIlRheCAoJCBwZXIgbGl0ZXIpXCJ9KVxudmlld29mIGJ1eWVyUmVzcCA9IElucHV0cy5yYW5nZShbMSwgNV0sIHtzdGVwOiAwLjUsIHZhbHVlOiAyLCBsYWJlbDogXCJIb3cgbXVjaCBidXllcnMgY3V0IGJhY2sgKDHigJM1KVwifSlcbnZpZXdvZiBzZWxsZXJSZXNwID0gSW5wdXRzLnJhbmdlKFsxLCA1XSwge3N0ZXA6IDAuNSwgdmFsdWU6IDIsIGxhYmVsOiBcIkhvdyBtdWNoIHNlbGxlcnMgY3V0IGJhY2sgKDHigJM1KVwifSlcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMiIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ii8vIExpbmVhciBkZW1hbmQgUCA9IGEgLSBiUSBhbmQgc3VwcGx5IFAgPSBjICsgZFEsIHBpdm90aW5nIGFyb3VuZCBhIGZpeGVkXG4vLyBuby10YXggZXF1aWxpYnJpdW0gc28gdGhlIHNsaWRlcnMgY2hhbmdlIG9ubHkgaG93IHJlc3BvbnNpdmUgZWFjaCBzaWRlIGlzLlxuUTAgPSAxMDBcblAwID0gMlxuYiA9IDAuMDQgLyBidXllclJlc3BcbmQgPSAwLjAyIC8gc2VsbGVyUmVzcFxuYSA9IFAwICsgYiAqIFEwXG5jID0gUDAgLSBkICogUTBcblF0ID0gTWF0aC5tYXgoMCwgUTAgLSB0IC8gKGIgKyBkKSlcblBiID0gYSAtIGIgKiBRdFxuUHMgPSBQYiAtIHRcbmJ1eWVyU2hhcmUgPSB0ID4gMCA/IChQYiAtIFAwKSAvIHQgOiBkIC8gKGIgKyBkKVxucmV2ZW51ZSA9IHQgKiBRdFxuZHdsID0gMC41ICogdCAqIChRMCAtIFF0KVxuY3MgPSAwLjUgKiAoYSAtIFBiKSAqIFF0XG5wcyA9IDAuNSAqIChQcyAtIGMpICogUXRcbmJhbmQgPSAoZnJvbSwgdG8sIGxvLCBoaSkgPT4gZDMucmFuZ2UoZnJvbSwgdG8gKyAxZS05LCBNYXRoLm1heCgodG8gLSBmcm9tKSAvIDYwLCAxZS02KSkubWFwKHEgPT4gKHtxLCBsbzogbG8ocSksIGhpOiBoaShxKX0pKVxuY3VydmUgPSBmID0+IGQzLnJhbmdlKDAsIDIwMSwgMikubWFwKHEgPT4gKHtxLCBwOiBmKHEpfSkpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTMiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJQbG90LnBsb3Qoe1xuICB3aWR0aDogODIwLFxuICBoZWlnaHQ6IDQ3MCxcbiAgbWFyZ2luTGVmdDogNTYsXG4gIG1hcmdpbkJvdHRvbTogNDYsXG4gIHN0eWxlOiB7Zm9udFNpemU6IFwiMTNweFwiLCBiYWNrZ3JvdW5kOiBcInRyYW5zcGFyZW50XCJ9LFxuICB4OiB7ZG9tYWluOiBbMCwgMjAwXSwgbGFiZWw6IFwiU29kYSBzb2xkICh0aG91c2FuZCBsaXRlcnMgcGVyIHdlZWspIOKGklwifSxcbiAgeToge2RvbWFpbjogWzAsIDZdLCBsYWJlbDogXCLihpEgUHJpY2UgKCQgcGVyIGxpdGVyKVwiLCBncmlkOiB0cnVlfSxcbiAgY2xpcDogdHJ1ZSxcbiAgbWFya3M6IFtcbiAgICBQbG90LmFyZWFZKGJhbmQoMCwgUXQsICgpID0+IFBiLCBxID0+IGEgLSBiICogcSksIHt4OiBcInFcIiwgeTE6IFwibG9cIiwgeTI6IFwiaGlcIiwgZmlsbDogXCIjMTc2Yjg3XCIsIGZpbGxPcGFjaXR5OiAwLjIyfSksXG4gICAgUGxvdC5hcmVhWShiYW5kKDAsIFF0LCBxID0+IGMgKyBkICogcSwgKCkgPT4gUHMpLCB7eDogXCJxXCIsIHkxOiBcImxvXCIsIHkyOiBcImhpXCIsIGZpbGw6IFwiI2U1YWQzZFwiLCBmaWxsT3BhY2l0eTogMC4zfSksXG4gICAgUGxvdC5hcmVhWShiYW5kKDAsIFF0LCAoKSA9PiBQcywgKCkgPT4gUGIpLCB7eDogXCJxXCIsIHkxOiBcImxvXCIsIHkyOiBcImhpXCIsIGZpbGw6IFwiIzJmN2Q1YlwiLCBmaWxsT3BhY2l0eTogMC4zfSksXG4gICAgUGxvdC5hcmVhWShiYW5kKFF0LCBRMCwgcSA9PiBjICsgZCAqIHEsIHEgPT4gYSAtIGIgKiBxKSwge3g6IFwicVwiLCB5MTogXCJsb1wiLCB5MjogXCJoaVwiLCBmaWxsOiBcIiNjMjRmM2RcIiwgZmlsbE9wYWNpdHk6IDAuNDV9KSxcbiAgICBQbG90LmxpbmUoY3VydmUocSA9PiBhIC0gYiAqIHEpLCB7eDogXCJxXCIsIHk6IFwicFwiLCBzdHJva2U6IFwiIzE3NmI4N1wiLCBzdHJva2VXaWR0aDogM30pLFxuICAgIFBsb3QubGluZShjdXJ2ZShxID0+IGMgKyBkICogcSksIHt4OiBcInFcIiwgeTogXCJwXCIsIHN0cm9rZTogXCIjYjA3ZDEyXCIsIHN0cm9rZVdpZHRoOiAzfSksXG4gICAgUGxvdC5saW5lKGN1cnZlKHEgPT4gYyArIGQgKiBxICsgdCksIHt4OiBcInFcIiwgeTogXCJwXCIsIHN0cm9rZTogXCIjYjA3ZDEyXCIsIHN0cm9rZVdpZHRoOiAyLCBzdHJva2VEYXNoYXJyYXk6IFwiNiA1XCJ9KSxcbiAgICBQbG90LnJ1bGVZKFtQYiwgUHNdLCB7eDE6IDAsIHgyOiBRdCwgc3Ryb2tlOiBcIiMxMDJhNDNcIiwgc3Ryb2tlRGFzaGFycmF5OiBcIjIgNFwifSksXG4gICAgUGxvdC5ydWxlWChbUXRdLCB7eTE6IDAsIHkyOiBQYiwgc3Ryb2tlOiBcIiMxMDJhNDNcIiwgc3Ryb2tlRGFzaGFycmF5OiBcIjIgNFwifSksXG4gICAgUGxvdC5kb3QoW3txOiBRMCwgcDogUDB9XSwge3g6IFwicVwiLCB5OiBcInBcIiwgcjogNSwgZmlsbDogXCIjZmZmXCIsIHN0cm9rZTogXCIjMTAyYTQzXCIsIHN0cm9rZVdpZHRoOiAyfSksXG4gICAgUGxvdC5kb3QoW3txOiBRdCwgcDogUGJ9LCB7cTogUXQsIHA6IFBzfV0sIHt4OiBcInFcIiwgeTogXCJwXCIsIHI6IDUsIGZpbGw6IFwiIzEwMmE0M1wifSksXG4gICAgUGxvdC50ZXh0KFt7cTogMTk2LCBwOiBhIC0gYiAqIDE5Nn1dLCB7eDogXCJxXCIsIHk6IFwicFwiLCB0ZXh0OiAoKSA9PiBcIkRlbWFuZFwiLCBkeTogLTEyLCB0ZXh0QW5jaG9yOiBcImVuZFwiLCBmaWxsOiBcIiMxNzZiODdcIiwgZm9udFdlaWdodDogNzAwfSksXG4gICAgUGxvdC50ZXh0KFt7cTogMTk2LCBwOiBNYXRoLm1pbig1LjgsIGMgKyBkICogMTk2KX1dLCB7eDogXCJxXCIsIHk6IFwicFwiLCB0ZXh0OiAoKSA9PiBcIlN1cHBseVwiLCBkeTogMTQsIHRleHRBbmNob3I6IFwiZW5kXCIsIGZpbGw6IFwiI2IwN2QxMlwiLCBmb250V2VpZ2h0OiA3MDB9KSxcbiAgICBQbG90LnRleHQoW3txOiAxOTYsIHA6IE1hdGgubWluKDUuOCwgYyArIGQgKiAxOTYgKyB0KX1dLCB7eDogXCJxXCIsIHk6IFwicFwiLCB0ZXh0OiAoKSA9PiB0ID4gMCA/IFwiU3VwcGx5ICsgdGF4XCIgOiBcIlwiLCBkeTogLTEwLCB0ZXh0QW5jaG9yOiBcImVuZFwiLCBmaWxsOiBcIiNiMDdkMTJcIn0pLFxuICAgIFBsb3QudGV4dChbe3E6IFEwLCBwOiBQMH1dLCB7eDogXCJxXCIsIHk6IFwicFwiLCB0ZXh0OiAoKSA9PiBcIk5vLXRheCBlcXVpbGlicml1bVwiLCBkeDogMTAsIGR5OiAxNiwgdGV4dEFuY2hvcjogXCJzdGFydFwiLCBmaWxsOiBcIiM1OTcyODdcIn0pXG4gIF1cbn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTQiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJzd2F0Y2ggPSAoY29sb3IsIG9wYWNpdHksIGxhYmVsKSA9PiBodG1sYDxzcGFuIHN0eWxlPVwiZGlzcGxheTppbmxpbmUtZmxleDthbGlnbi1pdGVtczpjZW50ZXI7Z2FwOi40cmVtO21hcmdpbi1yaWdodDoxLjFyZW1cIj48c3BhbiBzdHlsZT1cIndpZHRoOjE0cHg7aGVpZ2h0OjE0cHg7YmFja2dyb3VuZDoke2NvbG9yfTtvcGFjaXR5OiR7b3BhY2l0eX1cIj48L3NwYW4+JHtsYWJlbH08L3NwYW4+YFxuaHRtbGA8ZGl2IHN0eWxlPVwiZm9udC1zaXplOi45cmVtO2NvbG9yOiM1OTcyODdcIj5cbiR7c3dhdGNoKFwiIzE3NmI4N1wiLCAuNSwgXCJCdXllcnMnIGdhaW4gKGNvbnN1bWVyIHN1cnBsdXMpXCIpfVxuJHtzd2F0Y2goXCIjZTVhZDNkXCIsIC42LCBcIlNlbGxlcnMnIGdhaW4gKHByb2R1Y2VyIHN1cnBsdXMpXCIpfVxuJHtzd2F0Y2goXCIjMmY3ZDViXCIsIC42LCBcIlRheCByZXZlbnVlXCIpfVxuJHtzd2F0Y2goXCIjYzI0ZjNkXCIsIC43LCBcIkRlYWR3ZWlnaHQgbG9zc1wiKX1cbjwvZGl2PmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtNSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Im1vbmV5ID0geCA9PiBcIiRcIiArIGQzLmZvcm1hdChcIiwuMGZcIikoeCAqIDEwMDApXG5odG1sYDxkaXYgY2xhc3M9XCJzdGF0LXJvd1wiPlxuICA8ZGl2IGNsYXNzPVwic3RhdFwiPjxkaXYgY2xhc3M9XCJrXCI+UHJpY2UgYnV5ZXJzIHBheTwvZGl2PjxkaXYgY2xhc3M9XCJ2XCI+JCR7UGIudG9GaXhlZCgyKX08L2Rpdj48L2Rpdj5cbiAgPGRpdiBjbGFzcz1cInN0YXRcIj48ZGl2IGNsYXNzPVwia1wiPlByaWNlIHNlbGxlcnMga2VlcDwvZGl2PjxkaXYgY2xhc3M9XCJ2XCI+JCR7UHMudG9GaXhlZCgyKX08L2Rpdj48L2Rpdj5cbiAgPGRpdiBjbGFzcz1cInN0YXRcIj48ZGl2IGNsYXNzPVwia1wiPlNoYXJlIHBhaWQgYnkgYnV5ZXJzPC9kaXY+PGRpdiBjbGFzcz1cInZcIj4ke01hdGgucm91bmQoMTAwICogYnV5ZXJTaGFyZSl9JTwvZGl2PjwvZGl2PlxuICA8ZGl2IGNsYXNzPVwic3RhdFwiPjxkaXYgY2xhc3M9XCJrXCI+U29kYSBzb2xkPC9kaXY+PGRpdiBjbGFzcz1cInZcIj4ke1F0LnRvRml4ZWQoMCl9ayBMIDxzcGFuIHN0eWxlPVwiZm9udC1zaXplOi44NXJlbTtjb2xvcjojNTk3Mjg3XCI+KCR7UXQgPCBRMCA/IFwi4oiSXCIgKyAoMTAwICogKFEwIC0gUXQpIC8gUTApLnRvRml4ZWQoMCkgKyBcIiVcIiA6IFwibm8gY2hhbmdlXCJ9KTwvc3Bhbj48L2Rpdj48L2Rpdj5cbiAgPGRpdiBjbGFzcz1cInN0YXRcIj48ZGl2IGNsYXNzPVwia1wiPlRheCByZXZlbnVlIC8gd2VlazwvZGl2PjxkaXYgY2xhc3M9XCJ2XCI+JHttb25leShyZXZlbnVlKX08L2Rpdj48L2Rpdj5cbiAgPGRpdiBjbGFzcz1cInN0YXRcIiBzdHlsZT1cImJvcmRlci1sZWZ0LWNvbG9yOiNjMjRmM2RcIj48ZGl2IGNsYXNzPVwia1wiPkRlYWR3ZWlnaHQgbG9zcyAvIHdlZWs8L2Rpdj48ZGl2IGNsYXNzPVwidlwiPiR7bW9uZXkoZHdsKX08L2Rpdj48L2Rpdj5cbjwvZGl2PmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgndCcpIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0UXVpZXQiLCJzb3VyY2UiOiJzaGlueUlucHV0KCdidXllclJlc3AnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgnc2VsbGVyUmVzcCcpIn1dfQ==
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../explorers";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/pubadm513\.classes\.chrisbirdsall\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

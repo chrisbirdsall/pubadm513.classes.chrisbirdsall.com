@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Interactive Lorenz curve and Gini coefficient explorer with Idaho and US Census data.">
+
+<title>Lorenz curves and the Gini · PUBADM 513 – PUBADM 513</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-70a195fd42802aac2c3e40fbd8aa6df2.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script type="module" src="../site_libs/quarto-ojs/quarto-ojs-runtime.js"></script>
+<link href="../site_libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="fullcontent quarto-light">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lorenz curves and the Gini coefficient</h1>
+</div>
+
+<div>
+  <div class="description">
+    Interactive Lorenz curve and Gini coefficient explorer with Idaho and US Census data.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><a class="back-link" href="../index.html">← PUBADM 513</a></p>
+<div class="explorer-intro">
+<p>Line up every household from poorest to richest. A Lorenz curve asks: what share of all income goes to the bottom 20%? The bottom 40%? If income were shared equally, the curve would follow the diagonal. The Gini coefficient measures the gap between the diagonal and the curve. It runs from 0 (everyone has the same income) to 1 (one household has everything).</p>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="17" data-source-offset="-132"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 16;"><span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>census <span class="op">=</span> ({</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="st">"Idaho"</span><span class="op">:</span> {<span class="dt">shares</span><span class="op">:</span> [<span class="fl">3.89</span><span class="op">,</span> <span class="fl">9.90</span><span class="op">,</span> <span class="fl">15.70</span><span class="op">,</span> <span class="fl">23.04</span><span class="op">,</span> <span class="fl">47.48</span>]<span class="op">,</span> <span class="dt">gini</span><span class="op">:</span> <span class="fl">0.4345</span>}<span class="op">,</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">"United States"</span><span class="op">:</span> {<span class="dt">shares</span><span class="op">:</span> [<span class="fl">3.00</span><span class="op">,</span> <span class="fl">8.55</span><span class="op">,</span> <span class="fl">14.39</span><span class="op">,</span> <span class="fl">22.59</span><span class="op">,</span> <span class="fl">51.47</span>]<span class="op">,</span> <span class="dt">gini</span><span class="op">:</span> <span class="fl">0.4809</span>}</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>lorenz <span class="op">=</span> shares <span class="kw">=&gt;</span> {</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> total <span class="op">=</span> d3<span class="op">.</span><span class="fu">sum</span>(shares)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> cum <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> [{<span class="dt">x</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">0</span>}<span class="op">,</span> <span class="op">...</span>shares<span class="op">.</span><span class="fu">map</span>((s<span class="op">,</span> i) <span class="kw">=&gt;</span> ({<span class="dt">x</span><span class="op">:</span> (i <span class="op">+</span> <span class="dv">1</span>) <span class="op">/</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> (cum <span class="op">+=</span> s <span class="op">/</span> total)}))]</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">// Trapezoid rule on five quintile points</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>giniOf <span class="op">=</span> pts <span class="kw">=&gt;</span> <span class="dv">1</span> <span class="op">-</span> d3<span class="op">.</span><span class="fu">sum</span>(pts<span class="op">.</span><span class="fu">slice</span>(<span class="dv">1</span>)<span class="op">,</span> (p<span class="op">,</span> i) <span class="kw">=&gt;</span> (p<span class="op">.</span><span class="at">x</span> <span class="op">-</span> pts[i]<span class="op">.</span><span class="at">x</span>) <span class="op">*</span> (p<span class="op">.</span><span class="at">y</span> <span class="op">+</span> pts[i]<span class="op">.</span><span class="at">y</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="explorer-panel">
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="32" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 31;"><span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>viewof place <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">radio</span>([<span class="st">"Idaho"</span><span class="op">,</span> <span class="st">"United States"</span>]<span class="op">,</span> {<span class="dt">value</span><span class="op">:</span> <span class="st">"Idaho"</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Compare with"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<p><strong>Build your own economy.</strong> Here is the average household income in each fifth, in thousands of dollars:</p>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="40" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 39;"><span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>viewof q1 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">400</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">15</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Poorest 20%"</span>})</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a>viewof q2 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">400</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">40</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Next 20%"</span>})</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>viewof q3 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">400</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">65</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Middle 20%"</span>})</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>viewof q4 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">400</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">100</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Next 20%"</span>})</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>viewof q5 <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">400</span>]<span class="op">,</span> {<span class="dt">step</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">230</span><span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Richest 20%"</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-3-5" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="49" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 48;"><span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>mine <span class="op">=</span> <span class="fu">lorenz</span>([q1<span class="op">,</span> q2<span class="op">,</span> q3<span class="op">,</span> q4<span class="op">,</span> q5])</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>theirs <span class="op">=</span> <span class="fu">lorenz</span>(census[place]<span class="op">.</span><span class="at">shares</span>)</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>myGini <span class="op">=</span> d3<span class="op">.</span><span class="fu">sum</span>([q1<span class="op">,</span> q2<span class="op">,</span> q3<span class="op">,</span> q4<span class="op">,</span> q5]) <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> <span class="fu">giniOf</span>(mine) <span class="op">:</span> <span class="kw">NaN</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>theirGini <span class="op">=</span> <span class="fu">giniOf</span>(theirs)</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">560</span><span class="op">,</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">520</span><span class="op">,</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">56</span><span class="op">,</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginBottom</span><span class="op">:</span> <span class="dv">46</span><span class="op">,</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  <span class="dt">style</span><span class="op">:</span> {<span class="dt">fontSize</span><span class="op">:</span> <span class="st">"13px"</span><span class="op">,</span> <span class="dt">background</span><span class="op">:</span> <span class="st">"transparent"</span>}<span class="op">,</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"Share of households, poorest to richest →"</span><span class="op">,</span> <span class="dt">tickFormat</span><span class="op">:</span> <span class="st">"%"</span>}<span class="op">,</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {<span class="dt">domain</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span> <span class="dt">label</span><span class="op">:</span> <span class="st">"↑ Share of all income"</span><span class="op">,</span> <span class="dt">tickFormat</span><span class="op">:</span> <span class="st">"%"</span><span class="op">,</span> <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(theirs<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y1</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">y2</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#176b87"</span><span class="op">,</span> <span class="dt">fillOpacity</span><span class="op">:</span> <span class="fl">0.12</span>})<span class="op">,</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>([{<span class="dt">x</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">0</span>}<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">1</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#597287"</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"5 5"</span>})<span class="op">,</span></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(theirs<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#176b87"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span>})<span class="op">,</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(theirs<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#176b87"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">4</span>})<span class="op">,</span></span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">line</span>(mine<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"#2f7d5b"</span><span class="op">,</span> <span class="dt">strokeWidth</span><span class="op">:</span> <span class="dv">3</span><span class="op">,</span> <span class="dt">strokeDasharray</span><span class="op">:</span> <span class="st">"8 4"</span>})<span class="op">,</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(mine<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#2f7d5b"</span><span class="op">,</span> <span class="dt">r</span><span class="op">:</span> <span class="dv">4</span>})<span class="op">,</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">x</span><span class="op">:</span> <span class="fl">0.55</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="fl">0.6</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="st">"Perfect equality"</span><span class="op">,</span> <span class="dt">rotate</span><span class="op">:</span> <span class="op">-</span><span class="dv">45</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#597287"</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="op">-</span><span class="dv">8</span>})<span class="op">,</span></span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">x</span><span class="op">:</span> <span class="fl">0.8</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> theirs[<span class="dv">4</span>]<span class="op">.</span><span class="at">y</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> place<span class="op">,</span> <span class="dt">dx</span><span class="op">:</span> <span class="dv">8</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="dv">14</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"start"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#176b87"</span><span class="op">,</span> <span class="dt">fontWeight</span><span class="op">:</span> <span class="dv">700</span>})<span class="op">,</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">text</span>([{<span class="dt">x</span><span class="op">:</span> <span class="fl">0.6</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> mine[<span class="dv">3</span>]<span class="op">.</span><span class="at">y</span>}]<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"x"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">text</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="st">"Your economy"</span><span class="op">,</span> <span class="dt">dx</span><span class="op">:</span> <span class="dv">8</span><span class="op">,</span> <span class="dt">dy</span><span class="op">:</span> <span class="dv">14</span><span class="op">,</span> <span class="dt">textAnchor</span><span class="op">:</span> <span class="st">"start"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"#2f7d5b"</span><span class="op">,</span> <span class="dt">fontWeight</span><span class="op">:</span> <span class="dv">700</span>})</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-1" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-2" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-3" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-4" data-nodetype="declaration">
+
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-4-5" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="77" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 76;"><span id="cb5-77"><a href="#cb5-77" aria-hidden="true" tabindex="-1"></a><span class="fu">html</span><span class="vs">`&lt;div class="stat-row"&gt;</span></span>
+<span id="cb5-78"><a href="#cb5-78" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat" style="border-left-color:#2f7d5b"&gt;&lt;div class="k"&gt;Your economy · Gini&lt;/div&gt;&lt;div class="v"&gt;</span><span class="sc">${</span><span class="pp">isNaN</span>(myGini) <span class="op">?</span> <span class="st">"—"</span> <span class="op">:</span> myGini<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)<span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-79"><a href="#cb5-79" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat"&gt;&lt;div class="k"&gt;</span><span class="sc">${</span>place<span class="sc">}</span><span class="vs"> · Gini from these 5 points&lt;/div&gt;&lt;div class="v"&gt;</span><span class="sc">${</span>theirGini<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)<span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-80"><a href="#cb5-80" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat"&gt;&lt;div class="k"&gt;</span><span class="sc">${</span>place<span class="sc">}</span><span class="vs"> · official Census Gini&lt;/div&gt;&lt;div class="v"&gt;</span><span class="sc">${</span>census[place]<span class="op">.</span><span class="at">gini</span><span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">3</span>)<span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a><span class="vs">  &lt;div class="stat" style="border-left-color:#e5ad3d"&gt;&lt;div class="k"&gt;Richest 20% / poorest 20% (yours)&lt;/div&gt;&lt;div class="v"&gt;</span><span class="sc">${</span>q1 <span class="op">&gt;</span> <span class="dv">0</span> <span class="op">?</span> (q5 <span class="op">/</span> q1)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">1</span>) <span class="op">+</span> <span class="st">"×"</span> <span class="op">:</span> <span class="st">"—"</span><span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;/div&gt;</span></span>
+<span id="cb5-82"><a href="#cb5-82" aria-hidden="true" tabindex="-1"></a><span class="vs">&lt;/div&gt;`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-5" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+<section id="try-this" class="level3 try-this">
+<h3 data-anchor-id="try-this">Try this</h3>
+<ol type="1">
+<li>Set all five sliders to the same income. What does the curve look like, and what is the Gini?</li>
+<li>Now <strong>double</strong> every household’s income. Does the Gini change? What does that tell you about what the Gini measures, and what it doesn’t?</li>
+<li>Take $20k from the richest fifth and give it to the poorest fifth. How far does the Gini fall? Now move $20k from the middle fifth to the next fifth. Which transfer matters more?</li>
+<li>Try to match Idaho’s curve. Then try to match the United States. What separates the two?</li>
+<li>Why is the official Census Gini higher than the one computed from just five points? (Hint: what’s hidden <em>inside</em> each fifth?)</li>
+</ol>
+</section>
+<p>Data: U.S. Census Bureau, American Community Survey 2024 1-year estimates, tables B19082 and B19083. Margins of error on the Gini (90% confidence): Idaho ±0.007, United States ±0.001.</p>
+<p>Read more: <a href="https://books.core-econ.org/espp/book/text/05.html#find-out-more-the-gini-coefficient-as-a-measure-of-inequality">ESPP 5.10, Comparing inequality across the world</a> and <a href="https://books.core-econ.org/espp/book/text/05.html">5.12 Doing Economics: Measuring inequality</a>.</p>
+
+
+
+</main> <!-- /main -->
+<script type="ojs-module-contents">
+eyJjb250ZW50cyI6W3sibWV0aG9kTmFtZSI6ImludGVycHJldCIsImNlbGxOYW1lIjoib2pzLWNlbGwtMSIsImlubGluZSI6ZmFsc2UsInNvdXJjZSI6Ii8vIEFDUyAyMDI0IDEteWVhciwgdGFibGUgQjE5MDgyIChzaGFyZXMgb2YgYWdncmVnYXRlIGhvdXNlaG9sZCBpbmNvbWUgYnkgcXVpbnRpbGUpXG4vLyBhbmQgQjE5MDgzIChHaW5pIGluZGV4KS4gUXVlcmllZCAyMDI2LTEwLTI2LlxuY2Vuc3VzID0gKHtcbiAgXCJJZGFob1wiOiB7c2hhcmVzOiBbMy44OSwgOS45MCwgMTUuNzAsIDIzLjA0LCA0Ny40OF0sIGdpbmk6IDAuNDM0NX0sXG4gIFwiVW5pdGVkIFN0YXRlc1wiOiB7c2hhcmVzOiBbMy4wMCwgOC41NSwgMTQuMzksIDIyLjU5LCA1MS40N10sIGdpbmk6IDAuNDgwOX1cbn0pXG5sb3JlbnogPSBzaGFyZXMgPT4ge1xuICBjb25zdCB0b3RhbCA9IGQzLnN1bShzaGFyZXMpXG4gIGxldCBjdW0gPSAwXG4gIHJldHVybiBbe3g6IDAsIHk6IDB9LCAuLi5zaGFyZXMubWFwKChzLCBpKSA9PiAoe3g6IChpICsgMSkgLyA1LCB5OiAoY3VtICs9IHMgLyB0b3RhbCl9KSldXG59XG4vLyBUcmFwZXpvaWQgcnVsZSBvbiBmaXZlIHF1aW50aWxlIHBvaW50c1xuZ2luaU9mID0gcHRzID0+IDEgLSBkMy5zdW0ocHRzLnNsaWNlKDEpLCAocCwgaSkgPT4gKHAueCAtIHB0c1tpXS54KSAqIChwLnkgKyBwdHNbaV0ueSkpXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTIiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJ2aWV3b2YgcGxhY2UgPSBJbnB1dHMucmFkaW8oW1wiSWRhaG9cIiwgXCJVbml0ZWQgU3RhdGVzXCJdLCB7dmFsdWU6IFwiSWRhaG9cIiwgbGFiZWw6IFwiQ29tcGFyZSB3aXRoXCJ9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC0zIiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoidmlld29mIHExID0gSW5wdXRzLnJhbmdlKFswLCA0MDBdLCB7c3RlcDogNSwgdmFsdWU6IDE1LCBsYWJlbDogXCJQb29yZXN0IDIwJVwifSlcbnZpZXdvZiBxMiA9IElucHV0cy5yYW5nZShbMCwgNDAwXSwge3N0ZXA6IDUsIHZhbHVlOiA0MCwgbGFiZWw6IFwiTmV4dCAyMCVcIn0pXG52aWV3b2YgcTMgPSBJbnB1dHMucmFuZ2UoWzAsIDQwMF0sIHtzdGVwOiA1LCB2YWx1ZTogNjUsIGxhYmVsOiBcIk1pZGRsZSAyMCVcIn0pXG52aWV3b2YgcTQgPSBJbnB1dHMucmFuZ2UoWzAsIDQwMF0sIHtzdGVwOiA1LCB2YWx1ZTogMTAwLCBsYWJlbDogXCJOZXh0IDIwJVwifSlcbnZpZXdvZiBxNSA9IElucHV0cy5yYW5nZShbMCwgNDAwXSwge3N0ZXA6IDUsIHZhbHVlOiAyMzAsIGxhYmVsOiBcIlJpY2hlc3QgMjAlXCJ9KVxuIn0seyJtZXRob2ROYW1lIjoiaW50ZXJwcmV0IiwiY2VsbE5hbWUiOiJvanMtY2VsbC00IiwiaW5saW5lIjpmYWxzZSwic291cmNlIjoibWluZSA9IGxvcmVueihbcTEsIHEyLCBxMywgcTQsIHE1XSlcbnRoZWlycyA9IGxvcmVueihjZW5zdXNbcGxhY2VdLnNoYXJlcylcbm15R2luaSA9IGQzLnN1bShbcTEsIHEyLCBxMywgcTQsIHE1XSkgPiAwID8gZ2luaU9mKG1pbmUpIDogTmFOXG50aGVpckdpbmkgPSBnaW5pT2YodGhlaXJzKVxuUGxvdC5wbG90KHtcbiAgd2lkdGg6IDU2MCxcbiAgaGVpZ2h0OiA1MjAsXG4gIG1hcmdpbkxlZnQ6IDU2LFxuICBtYXJnaW5Cb3R0b206IDQ2LFxuICBzdHlsZToge2ZvbnRTaXplOiBcIjEzcHhcIiwgYmFja2dyb3VuZDogXCJ0cmFuc3BhcmVudFwifSxcbiAgeDoge2RvbWFpbjogWzAsIDFdLCBsYWJlbDogXCJTaGFyZSBvZiBob3VzZWhvbGRzLCBwb29yZXN0IHRvIHJpY2hlc3Qg4oaSXCIsIHRpY2tGb3JtYXQ6IFwiJVwifSxcbiAgeToge2RvbWFpbjogWzAsIDFdLCBsYWJlbDogXCLihpEgU2hhcmUgb2YgYWxsIGluY29tZVwiLCB0aWNrRm9ybWF0OiBcIiVcIiwgZ3JpZDogdHJ1ZX0sXG4gIG1hcmtzOiBbXG4gICAgUGxvdC5hcmVhWSh0aGVpcnMsIHt4OiBcInhcIiwgeTE6IFwieVwiLCB5MjogXCJ4XCIsIGZpbGw6IFwiIzE3NmI4N1wiLCBmaWxsT3BhY2l0eTogMC4xMn0pLFxuICAgIFBsb3QubGluZShbe3g6IDAsIHk6IDB9LCB7eDogMSwgeTogMX1dLCB7eDogXCJ4XCIsIHk6IFwieVwiLCBzdHJva2U6IFwiIzU5NzI4N1wiLCBzdHJva2VEYXNoYXJyYXk6IFwiNSA1XCJ9KSxcbiAgICBQbG90LmxpbmUodGhlaXJzLCB7eDogXCJ4XCIsIHk6IFwieVwiLCBzdHJva2U6IFwiIzE3NmI4N1wiLCBzdHJva2VXaWR0aDogM30pLFxuICAgIFBsb3QuZG90KHRoZWlycywge3g6IFwieFwiLCB5OiBcInlcIiwgZmlsbDogXCIjMTc2Yjg3XCIsIHI6IDR9KSxcbiAgICBQbG90LmxpbmUobWluZSwge3g6IFwieFwiLCB5OiBcInlcIiwgc3Ryb2tlOiBcIiMyZjdkNWJcIiwgc3Ryb2tlV2lkdGg6IDMsIHN0cm9rZURhc2hhcnJheTogXCI4IDRcIn0pLFxuICAgIFBsb3QuZG90KG1pbmUsIHt4OiBcInhcIiwgeTogXCJ5XCIsIGZpbGw6IFwiIzJmN2Q1YlwiLCByOiA0fSksXG4gICAgUGxvdC50ZXh0KFt7eDogMC41NSwgeTogMC42fV0sIHt4OiBcInhcIiwgeTogXCJ5XCIsIHRleHQ6ICgpID0+IFwiUGVyZmVjdCBlcXVhbGl0eVwiLCByb3RhdGU6IC00NSwgZmlsbDogXCIjNTk3Mjg3XCIsIGR5OiAtOH0pLFxuICAgIFBsb3QudGV4dChbe3g6IDAuOCwgeTogdGhlaXJzWzRdLnl9XSwge3g6IFwieFwiLCB5OiBcInlcIiwgdGV4dDogKCkgPT4gcGxhY2UsIGR4OiA4LCBkeTogMTQsIHRleHRBbmNob3I6IFwic3RhcnRcIiwgZmlsbDogXCIjMTc2Yjg3XCIsIGZvbnRXZWlnaHQ6IDcwMH0pLFxuICAgIFBsb3QudGV4dChbe3g6IDAuNiwgeTogbWluZVszXS55fV0sIHt4OiBcInhcIiwgeTogXCJ5XCIsIHRleHQ6ICgpID0+IFwiWW91ciBlY29ub215XCIsIGR4OiA4LCBkeTogMTQsIHRleHRBbmNob3I6IFwic3RhcnRcIiwgZmlsbDogXCIjMmY3ZDViXCIsIGZvbnRXZWlnaHQ6IDcwMH0pXG4gIF1cbn0pXG4ifSx7Im1ldGhvZE5hbWUiOiJpbnRlcnByZXQiLCJjZWxsTmFtZSI6Im9qcy1jZWxsLTUiLCJpbmxpbmUiOmZhbHNlLCJzb3VyY2UiOiJodG1sYDxkaXYgY2xhc3M9XCJzdGF0LXJvd1wiPlxuICA8ZGl2IGNsYXNzPVwic3RhdFwiIHN0eWxlPVwiYm9yZGVyLWxlZnQtY29sb3I6IzJmN2Q1YlwiPjxkaXYgY2xhc3M9XCJrXCI+WW91ciBlY29ub215IMK3IEdpbmk8L2Rpdj48ZGl2IGNsYXNzPVwidlwiPiR7aXNOYU4obXlHaW5pKSA/IFwi4oCUXCIgOiBteUdpbmkudG9GaXhlZCgzKX08L2Rpdj48L2Rpdj5cbiAgPGRpdiBjbGFzcz1cInN0YXRcIj48ZGl2IGNsYXNzPVwia1wiPiR7cGxhY2V9IMK3IEdpbmkgZnJvbSB0aGVzZSA1IHBvaW50czwvZGl2PjxkaXYgY2xhc3M9XCJ2XCI+JHt0aGVpckdpbmkudG9GaXhlZCgzKX08L2Rpdj48L2Rpdj5cbiAgPGRpdiBjbGFzcz1cInN0YXRcIj48ZGl2IGNsYXNzPVwia1wiPiR7cGxhY2V9IMK3IG9mZmljaWFsIENlbnN1cyBHaW5pPC9kaXY+PGRpdiBjbGFzcz1cInZcIj4ke2NlbnN1c1twbGFjZV0uZ2luaS50b0ZpeGVkKDMpfTwvZGl2PjwvZGl2PlxuICA8ZGl2IGNsYXNzPVwic3RhdFwiIHN0eWxlPVwiYm9yZGVyLWxlZnQtY29sb3I6I2U1YWQzZFwiPjxkaXYgY2xhc3M9XCJrXCI+UmljaGVzdCAyMCUgLyBwb29yZXN0IDIwJSAoeW91cnMpPC9kaXY+PGRpdiBjbGFzcz1cInZcIj4ke3ExID4gMCA/IChxNSAvIHExKS50b0ZpeGVkKDEpICsgXCLDl1wiIDogXCLigJRcIn08L2Rpdj48L2Rpdj5cbjwvZGl2PmBcbiJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncGxhY2UnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncTEnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncTInKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncTMnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncTQnKSJ9LHsibWV0aG9kTmFtZSI6ImludGVycHJldFF1aWV0Iiwic291cmNlIjoic2hpbnlJbnB1dCgncTUnKSJ9XX0=
+</script>
+<script type="module">
+if (window.location.protocol === "file:") { alert("The OJS runtime does not work with file:// URLs. Please use a web server to view this document."); }
+window._ojs.paths.runtimeToDoc = "../../explorers";
+window._ojs.paths.runtimeToRoot = "../..";
+window._ojs.paths.docToRoot = "..";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpretFromScriptTags();
+</script>
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/pubadm513\.classes\.chrisbirdsall\.com");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

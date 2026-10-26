@@ -1,0 +1,20 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "PUBADM 513"
+  site-url: "https://pubadm513.classes.chrisbirdsall.com"
+  navbar: false
+  search: false
+
+format:
+  html:
+    theme:
+      - cosmo
+      - styles.scss
+    css: styles.css
+    toc: false
+    anchor-sections: false
+
+editor: visual

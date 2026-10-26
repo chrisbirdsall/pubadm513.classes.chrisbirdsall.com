@@ -1,0 +1,11 @@
+/* Page-specific refinements live here; the shared visual system is in styles.scss. */
+
+body:has(.course-home) #title-block-header {
+  display: none;
+}
+
+/* Observable Inputs: give slider labels room so they don't wrap into columns */
+form[class^="oi-"] {
+  --label-width: 230px;
+  --input-width: 320px;
+}

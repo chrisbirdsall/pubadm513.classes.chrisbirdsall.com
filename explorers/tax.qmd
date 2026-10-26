@@ -1,0 +1,108 @@
+---
+title: "Who pays a sugar tax?"
+pagetitle: "Who pays a sugar tax? · PUBADM 513"
+description: "Interactive supply-and-demand explorer: tax incidence, revenue, and deadweight loss."
+---
+
+<a class="back-link" href="../index.html">← PUBADM 513</a>
+
+::: {.explorer-intro}
+Suppose Boise puts a tax on sugary drinks, collected from sellers. Who ends up paying it: the people buying soda, or the stores selling it? How much money does it raise, and how much buying and selling simply stops happening? Move the sliders and find out. This is the model behind *Doing Economics* Lab 2, which uses data from Berkeley's real soda tax.
+:::
+
+```{ojs}
+//| echo: false
+viewof t = Inputs.range([0, 1], {step: 0.05, value: 0.5, label: "Tax ($ per liter)"})
+viewof buyerResp = Inputs.range([1, 5], {step: 0.5, value: 2, label: "How much buyers cut back (1–5)"})
+viewof sellerResp = Inputs.range([1, 5], {step: 0.5, value: 2, label: "How much sellers cut back (1–5)"})
+```
+
+```{ojs}
+//| echo: false
+// Linear demand P = a - bQ and supply P = c + dQ, pivoting around a fixed
+// no-tax equilibrium so the sliders change only how responsive each side is.
+Q0 = 100
+P0 = 2
+b = 0.04 / buyerResp
+d = 0.02 / sellerResp
+a = P0 + b * Q0
+c = P0 - d * Q0
+Qt = Math.max(0, Q0 - t / (b + d))
+Pb = a - b * Qt
+Ps = Pb - t
+buyerShare = t > 0 ? (Pb - P0) / t : d / (b + d)
+revenue = t * Qt
+dwl = 0.5 * t * (Q0 - Qt)
+cs = 0.5 * (a - Pb) * Qt
+ps = 0.5 * (Ps - c) * Qt
+band = (from, to, lo, hi) => d3.range(from, to + 1e-9, Math.max((to - from) / 60, 1e-6)).map(q => ({q, lo: lo(q), hi: hi(q)}))
+curve = f => d3.range(0, 201, 2).map(q => ({q, p: f(q)}))
+```
+
+::: {.explorer-panel}
+```{ojs}
+//| echo: false
+Plot.plot({
+  width: 820,
+  height: 470,
+  marginLeft: 56,
+  marginBottom: 46,
+  style: {fontSize: "13px", background: "transparent"},
+  x: {domain: [0, 200], label: "Soda sold (thousand liters per week) →"},
+  y: {domain: [0, 6], label: "↑ Price ($ per liter)", grid: true},
+  clip: true,
+  marks: [
+    Plot.areaY(band(0, Qt, () => Pb, q => a - b * q), {x: "q", y1: "lo", y2: "hi", fill: "#176b87", fillOpacity: 0.22}),
+    Plot.areaY(band(0, Qt, q => c + d * q, () => Ps), {x: "q", y1: "lo", y2: "hi", fill: "#e5ad3d", fillOpacity: 0.3}),
+    Plot.areaY(band(0, Qt, () => Ps, () => Pb), {x: "q", y1: "lo", y2: "hi", fill: "#2f7d5b", fillOpacity: 0.3}),
+    Plot.areaY(band(Qt, Q0, q => c + d * q, q => a - b * q), {x: "q", y1: "lo", y2: "hi", fill: "#c24f3d", fillOpacity: 0.45}),
+    Plot.line(curve(q => a - b * q), {x: "q", y: "p", stroke: "#176b87", strokeWidth: 3}),
+    Plot.line(curve(q => c + d * q), {x: "q", y: "p", stroke: "#b07d12", strokeWidth: 3}),
+    Plot.line(curve(q => c + d * q + t), {x: "q", y: "p", stroke: "#b07d12", strokeWidth: 2, strokeDasharray: "6 5"}),
+    Plot.ruleY([Pb, Ps], {x1: 0, x2: Qt, stroke: "#102a43", strokeDasharray: "2 4"}),
+    Plot.ruleX([Qt], {y1: 0, y2: Pb, stroke: "#102a43", strokeDasharray: "2 4"}),
+    Plot.dot([{q: Q0, p: P0}], {x: "q", y: "p", r: 5, fill: "#fff", stroke: "#102a43", strokeWidth: 2}),
+    Plot.dot([{q: Qt, p: Pb}, {q: Qt, p: Ps}], {x: "q", y: "p", r: 5, fill: "#102a43"}),
+    Plot.text([{q: 196, p: a - b * 196}], {x: "q", y: "p", text: () => "Demand", dy: -12, textAnchor: "end", fill: "#176b87", fontWeight: 700}),
+    Plot.text([{q: 196, p: Math.min(5.8, c + d * 196)}], {x: "q", y: "p", text: () => "Supply", dy: 14, textAnchor: "end", fill: "#b07d12", fontWeight: 700}),
+    Plot.text([{q: 196, p: Math.min(5.8, c + d * 196 + t)}], {x: "q", y: "p", text: () => t > 0 ? "Supply + tax" : "", dy: -10, textAnchor: "end", fill: "#b07d12"}),
+    Plot.text([{q: Q0, p: P0}], {x: "q", y: "p", text: () => "No-tax equilibrium", dx: 10, dy: 16, textAnchor: "start", fill: "#597287"})
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+swatch = (color, opacity, label) => html`<span style="display:inline-flex;align-items:center;gap:.4rem;margin-right:1.1rem"><span style="width:14px;height:14px;background:${color};opacity:${opacity}"></span>${label}</span>`
+html`<div style="font-size:.9rem;color:#597287">
+${swatch("#176b87", .5, "Buyers' gain (consumer surplus)")}
+${swatch("#e5ad3d", .6, "Sellers' gain (producer surplus)")}
+${swatch("#2f7d5b", .6, "Tax revenue")}
+${swatch("#c24f3d", .7, "Deadweight loss")}
+</div>`
+```
+:::
+
+```{ojs}
+//| echo: false
+money = x => "$" + d3.format(",.0f")(x * 1000)
+html`<div class="stat-row">
+  <div class="stat"><div class="k">Price buyers pay</div><div class="v">$${Pb.toFixed(2)}</div></div>
+  <div class="stat"><div class="k">Price sellers keep</div><div class="v">$${Ps.toFixed(2)}</div></div>
+  <div class="stat"><div class="k">Share paid by buyers</div><div class="v">${Math.round(100 * buyerShare)}%</div></div>
+  <div class="stat"><div class="k">Soda sold</div><div class="v">${Qt.toFixed(0)}k L <span style="font-size:.85rem;color:#597287">(${Qt < Q0 ? "−" + (100 * (Q0 - Qt) / Q0).toFixed(0) + "%" : "no change"})</span></div></div>
+  <div class="stat"><div class="k">Tax revenue / week</div><div class="v">${money(revenue)}</div></div>
+  <div class="stat" style="border-left-color:#c24f3d"><div class="k">Deadweight loss / week</div><div class="v">${money(dwl)}</div></div>
+</div>`
+```
+
+::: {.try-this}
+### Try this
+
+1. Set buyers' response to **1**: people keep buying soda almost no matter the price. Who pays most of the tax now? What happens to the deadweight loss?
+2. Now set buyers' response to **5**. The tax shifts toward sellers, sales fall more, and revenue drops. If the goal is *public health* rather than *revenue*, which world do you want to be in?
+3. Double the tax from \$0.50 to \$1.00. Does the deadweight loss double, or do something else? Why?
+4. The statute says sellers pay the tax. Does that decide who actually pays it?
+:::
+
+Read more: [ESPP Unit 7, Firms and markets for goods and services](https://books.core-econ.org/espp/book/text/07.html) and [3.13 Doing Economics: Measuring the effect of a sugar tax](https://books.core-econ.org/espp/book/text/03.html#313-doing-economics-measuring-the-effect-of-a-sugar-tax).

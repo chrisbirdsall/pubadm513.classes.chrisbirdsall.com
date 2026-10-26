@@ -1,0 +1,137 @@
+---
+pagetitle: "Economics of Public Policy"
+description: "PUBADM 513-001 Economics of Public Policy, Spring 2027, Boise State University"
+page-layout: full
+title-block-banner: false
+---
+
+::::::: {.course-home}
+
+:::: {.course-hero}
+::: {.hero-copy}
+<div class="hero-kicker">PUBADM 513-001 <span aria-hidden="true">•</span> Spring 2027</div>
+
+<h1>Economics<br>of Public<br><span>Policy</span></h1>
+
+<p class="hero-institution">School of Public Service<br>Boise State University</p>
+:::
+
+::: {.hero-mark aria-hidden="true"}
+<svg viewBox="0 0 400 400" role="presentation">
+  <path class="axis" d="M40 24 V360 H384" />
+  <path class="guide" d="M215 195 V360 M215 195 H40" />
+  <line class="demand" x1="70" y1="60" x2="360" y2="330" />
+  <line class="supply" x1="70" y1="330" x2="360" y2="60" />
+  <circle class="eq-halo" cx="215" cy="195" r="26" />
+  <circle class="eq" cx="215" cy="195" r="12" />
+  <text class="num" x="256" y="236">513</text>
+  <text class="lbl" x="372" y="64">S</text>
+  <text class="lbl" x="372" y="342">D</text>
+  <text class="lbl" x="22" y="34">P</text>
+  <text class="lbl" x="378" y="388">Q</text>
+</svg>
+:::
+::::
+
+:::: {.course-information}
+::: {.info-panel .instructor-panel}
+<p class="section-label">Instructor</p>
+
+## Chris Birdsall
+
+<p>chrisbirdsall@boisestate.edu</p>
+<p>ERB 1149</p>
+<p>Office hours by appointment</p>
+:::
+
+::: {.info-panel .details-panel}
+<p class="section-label">Course details</p>
+
+## Wednesdays
+
+<p>January 13–April 28, 2027</p>
+<p>Time and room TBA</p>
+<p>Textbook: <a href="https://books.core-econ.org/espp/index.html"><em>Economy, Society, and Public Policy</em></a> (CORE, free online)</p>
+:::
+::::
+
+:::: {.course-section}
+## How this course works
+
+<p class="lede">Economics is easier to understand once you've been part of it. Each week we start by being the economic actors ourselves. Then we draw the model that explains what happened, and use it on a real policy question.</p>
+
+::: {.step-grid}
+<div class="step">
+<div class="step-number">Step 1</div>
+<h3>Play it</h3>
+<p>A short live experiment, run on your phone or with a deck of cards. We contribute to a public good, make and reject offers, trade in a market, and bargain over wages.</p>
+</div>
+
+<div class="step">
+<div class="step-number">Step 2</div>
+<h3>Draw it</h3>
+<p>We build the textbook model from our own results, using interactive figures where you move the sliders and watch what changes.</p>
+</div>
+
+<div class="step">
+<div class="step-number">Step 3</div>
+<h3>Use it</h3>
+<p>We apply the model to a live policy, often an Idaho one. All semester you'll work as the economist on one policy you choose.</p>
+</div>
+:::
+::::
+
+:::: {.course-section .alt}
+## Explorers
+
+<p class="lede">These are interactive figures for the graphs that matter most. Change the inputs and see what the model predicts.</p>
+
+::: {.card-grid}
+<div class="card">
+<div class="card-tag">Units 3 & 7</div>
+<h3><a href="explorers/tax.html">Who pays a sugar tax?</a></h3>
+<p>Supply, demand, and a per-unit tax. See how the tax splits between buyers and sellers, what it raises, and what it costs in lost trades.</p>
+</div>
+
+<div class="card">
+<div class="card-tag">Unit 5</div>
+<h3><a href="explorers/lorenz.html">Lorenz curves and the Gini coefficient</a></h3>
+<p>Compare Idaho and the US using Census data, then build your own economy and watch the Gini change.</p>
+</div>
+:::
+::::
+
+:::: {.course-section}
+## Schedule
+
+<p class="lede">Read the unit after class, once you've seen the model in action. Each lab night we do a <em>Doing Economics</em> project together in Excel.</p>
+
+<div class="schedule-wrap">
+<table class="schedule">
+<thead><tr><th>Date</th><th>Unit</th><th>Play it</th><th>Due</th></tr></thead>
+<tbody>
+<tr><td>Jan 13</td><td><span class="unit">Welcome · 1 Capitalism and democracy</span></td><td class="play">Income line-up</td><td></td></tr>
+<tr><td>Jan 20</td><td><span class="unit">2 Social interactions</span></td><td class="play">Public goods game</td><td></td></tr>
+<tr><td>Jan 27</td><td><span class="unit">2 Nash equilibrium and bargaining</span></td><td class="play">Climate prisoners' dilemma</td><td><span class="lab">Lab 1 · our experiment data</span></td></tr>
+<tr><td>Feb 3</td><td><span class="unit">3 Fairness and efficiency</span></td><td class="play">Ultimatum game</td><td><span class="due">Policy pick</span></td></tr>
+<tr><td>Feb 10</td><td><span class="unit">3 How do we know a policy works?</span></td><td class="play">Daycare fines</td><td><span class="lab">Lab 2 · sugar tax</span></td></tr>
+<tr><td>Feb 17</td><td><span class="unit">4 Work, wellbeing, and scarcity</span></td><td class="play">Time-use trade-offs</td><td><span class="due">Memo 1</span></td></tr>
+<tr><td>Feb 24</td><td><span class="unit">5 Institutions, power, and inequality</span></td><td class="play">Angela &amp; Bruno role-play</td><td><span class="lab">Lab 3 · Lorenz and Gini</span></td></tr>
+<tr><td>Mar 3</td><td><span class="unit">6 The firm</span></td><td class="play">Wage and effort game</td><td></td></tr>
+<tr><td>Mar 10</td><td><span class="unit">Midterm · project workshop</span></td><td class="play"></td><td><span class="due">Midterm</span></td></tr>
+<tr class="break"><td>Mar 17</td><td colspan="3">Spring break</td></tr>
+<tr><td>Mar 24</td><td><span class="unit">7 Firms and markets</span></td><td class="play">Pit-market trading</td><td><span class="due">Memo 2</span></td></tr>
+<tr><td>Mar 31</td><td><span class="unit">7 Taxes and market power</span></td><td class="play">Tax explorer</td><td><span class="lab">Lab 4 · supply and demand</span></td></tr>
+<tr><td>Apr 7</td><td><span class="unit">8 Labor and product markets</span></td><td class="play">Minimum-wage evidence</td><td></td></tr>
+<tr><td>Apr 14</td><td><span class="unit">11 Market successes and failures</span></td><td class="play">Lemons and fishery games</td><td><span class="due">Memo 3</span></td></tr>
+<tr><td>Apr 21</td><td><span class="unit">12 Governments and markets</span></td><td class="play">Feasibility triage</td><td></td></tr>
+<tr><td>Apr 28</td><td><span class="unit">Policy testimony</span></td><td class="play">Committee hearing</td><td><span class="due">Testimony</span></td></tr>
+<tr><td>May 5</td><td><span class="unit">Finals week</span></td><td class="play"></td><td><span class="due">Final policy brief</span></td></tr>
+</tbody>
+</table>
+</div>
+
+<p class="draft-note">Draft schedule. Canvas has the official dates and assignments.</p>
+::::
+
+:::::::
